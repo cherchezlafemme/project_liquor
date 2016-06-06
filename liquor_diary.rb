@@ -55,23 +55,10 @@ def match_liqour_type_to_diary(liquor_type, db)
   end
 end
 
-def add_wine_to_diary(db, name, grape, year, producer, country, comments, rating)
-  db.execute("INSERT INTO wines (name, grape, year, producer, country, comments, rating) VALUES (?, ?, ?, ?, ?, ?, ?)", [name, grape, year, producer, country, comments, rating])
-end
-
-#USER INTERACTION:
-#Ask for the users name
-  puts "What is your username?"
-  username = gets.chomp
-#Ask for the liquor type
-  puts "What diary do you want to create or access? Wine or whiskey?"
-  liquor_type = gets.chomp
-#Create a database for the user
-  create_database(username)
-  user_db = create_database(username)
-#Match the liquor type with the database and create a table if it doesn't exist
-  match_liqour_type_to_diary(liquor_type, user_db)
-#Collect the data about the new entry in the diary 
+def add_wine_to_diary(db)
+  def insert_wine_to_diary(db, name, grape, year, producer, country, comments, rating)
+    db.execute("INSERT INTO wines (name, grape, year, producer, country, comments, rating) VALUES (?, ?, ?, ?, ?, ?, ?)", [name, grape, year, producer, country, comments, rating])
+  end
   puts "What is the name of the wine?"
   name = gets.chomp
   puts "What is the grape this wine is made of?"
@@ -86,9 +73,49 @@ end
   comments = gets.chomp
   puts "How would you rate this wine? From 1 to 10 where 10 means excellent bottle!"
   rating = gets.chomp.to_i
-  add_wine_to_diary(user_db, name, grape, year, producer, country, comments, rating)
+  insert_wine_to_diary(db, name, grape, year, producer, country, comments, rating)
+end
+
+def add_whiskey_to_diary(db)
+  def insert_whiskey_to_diary(db, name, type, aged, producer, comments, rating)
+  db.execute("INSERT INTO whiskeys (name, type, aged, producer, comments, rating) VALUES (?, ?, ?, ?, ?, ?)", [name, type, aged, producer, comments, rating])
+  end
+  puts "What is the name of this whiskey?"
+  name = gets.chomp
+  puts "What type is this whiskey? Bourbon, rye, single malt scotch?"
+  type = gets.chomp
+  puts "How many years this whiskey has been aged?"
+  aged = gets.chomp.to_i
+  puts "Who is the producer?"
+  producer = gets.chomp
+  puts "Please, write the comment about this bottle of whiskey. Would you like to drink it again?"
+  comments = gets.chomp
+  puts "How would you rate this whiskey? From 1 to 10 where 10 means excellent bottle!"
+  rating = gets.chomp.to_i
+  insert_whiskey_to_diary(db, name, type, aged, producer, comments, rating)
+end
 
 
+#USER INTERACTION:
+#Ask for the users name
+  puts "What is your username?"
+  username = gets.chomp
+#Ask for the liquor type
+  puts "What diary do you want to create or access? Wine or whiskey?"
+  liquor_type = gets.chomp
+#Create a database for the user
+  create_database(username)
+  user_db = create_database(username)
+#Match the liquor type with the database and create a table if it doesn't exist
+  match_liqour_type_to_diary(liquor_type, user_db)
+
+#Collect the data about the new entry in the diary and insert this data into the table
+  if liquor_type.downcase == "whiskey"
+  add_whiskey_to_diary(user_db)
+  elsif liquor_type.downcase == "wine"
+  add_wine_to_diary(user_db)
+  else puts "Sorry, we are working on expanding our liquor options for your diaries. Stay tunned!"
+  end
 
 
 
