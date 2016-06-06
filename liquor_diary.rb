@@ -4,7 +4,6 @@ Program allows user create a database with their username as a title.
 Database exist of the list of the liquor that user tried.
 Allow user to: 
 - add new liquor items to user's diary
-- update existing item information
 - view the whole diary log
 - see all the liquor that user rated specific way
 - view all the liquor that has the same grape, country, producer
@@ -99,7 +98,7 @@ def view_wine_diary(db)
   wine_library = db.execute("SELECT * FROM wines")
   wine_library.each do |wine_bottle|
     puts "\n"
-    puts "Name: #{wine_bottle['name']}"
+    puts "Wine name: #{wine_bottle['name']}"
     puts "Grape: #{wine_bottle['grape']}"
     puts "Year: #{wine_bottle['year']}"
     puts "Producer: #{wine_bottle['producer']}"
@@ -110,6 +109,19 @@ def view_wine_diary(db)
 end
 end
 
+def view_whiskey_diary(db)
+  whiskey_library = db.execute("SELECT * FROM whiskeys")
+  whiskey_library.each do |whiskey_bottle|
+    puts "\n"
+    puts "Whiskey name: #{wine_bottle['name']}"
+    puts "Type: #{wine_bottle['type']}"
+    puts "Years this whiskey was aged: #{wine_bottle['aged']}"
+    puts "Producer: #{wine_bottle['producer']}"
+    puts "Comment: #{wine_bottle['comments']}"
+    puts "Rating: #{wine_bottle['rating']}"
+    puts "\n"
+end
+end
 
 
 #USER INTERACTION:
@@ -142,12 +154,25 @@ else puts "Sorry, we didn't get it."
 end
 end until add_new_liquor.downcase == "n"
 
-view_wine_diary(user_db)
-#
+#See all the items you have in your liquor diary
+end_looking = false
+begin
+puts "Do you want to see your liquor diary log? y/n"
+see_diary_log = gets.chomp
+  if see_diary_log.downcase == "y"
+    if liquor_type.downcase == "wine"
+    view_wine_diary(user_db)
+    end_looking = true
+    elsif liquor_type.downcase == "whiskey"
+    view_whiskey_diary(user_db)
+    end_looking = true
+    else  puts "Sorry, we are working on expanding our liquor options for your diaries. Stay tunned!"
+    end_looking = true
+    end
+  elsif see_diary_log.downcase == "n"
+    end_looking = true
+  else puts "Sorry, there must be an error. Let's try one more time!"
+  end
+end until end_looking == true
 
-
-# kittens = db.execute("SELECT * FROM kittens")
-# kittens.each do |kitten|
-#  puts "#{kitten['name']} is #{kitten['age']}"
-# end
 
