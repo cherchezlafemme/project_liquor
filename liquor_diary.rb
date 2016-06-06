@@ -8,33 +8,32 @@ db.results_as_hash = true
 db
 end
 
-#Table creators:
-create_table_whiskey = <<-SQL
-  CREATE TABLE IF NOT EXISTS whiskeys(
-    id INTEGER PRIMARY KEY,
-    name VARCHAR(255),
-    type VARCHAR(255),
-    aged INT,
-    producer VARCHAR(255),
-    comments VARCHAR(255),
-    rating INT
-  )
-SQL
-
-create_table_wine = <<-SQL
-  CREATE TABLE IF NOT EXISTS wines(
-    id INTEGER PRIMARY KEY,
-    name VARCHAR(255),
-    grape VARCHAR(255),
-    year INT,
-    producer VARCHAR(255),
-    country VARCHAR(255),
-    comments VARCHAR(255),
-    rating INT
-  )
-SQL
-
 def match_liqour_type_to_diary(liquor_type, db)
+ #Table creators:
+  create_table_whiskey = <<-SQL
+    CREATE TABLE IF NOT EXISTS whiskeys(
+      id INTEGER PRIMARY KEY,
+      name VARCHAR(255),
+      type VARCHAR(255),
+      aged INT,
+      producer VARCHAR(255),
+      comments VARCHAR(255),
+      rating INT
+    )
+  SQL
+  create_table_wine = <<-SQL
+    CREATE TABLE IF NOT EXISTS wines(
+      id INTEGER PRIMARY KEY,
+      name VARCHAR(255),
+      grape VARCHAR(255),
+      year INT,
+      producer VARCHAR(255),
+      country VARCHAR(255),
+      comments VARCHAR(255),
+      rating INT
+    )
+  SQL
+  
   if liquor_type.downcase == "whiskey"
     db.execute(create_table_whiskey)
   elsif liquor_type.downcase == "wine"
