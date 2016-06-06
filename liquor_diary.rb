@@ -95,6 +95,22 @@ def add_whiskey_to_diary(db)
   insert_whiskey_to_diary(db, name, type, aged, producer, comments, rating)
 end
 
+def view_wine_diary(db)
+  wine_library = db.execute("SELECT * FROM wines")
+  wine_library.each do |wine_bottle|
+    puts "\n"
+    puts "Name: #{wine_bottle['name']}"
+    puts "Grape: #{wine_bottle['grape']}"
+    puts "Year: #{wine_bottle['year']}"
+    puts "Producer: #{wine_bottle['producer']}"
+    puts "Country: #{wine_bottle['country']}"
+    puts "Comment: #{wine_bottle['comments']}"
+    puts "Rating: #{wine_bottle['rating']}"
+    puts "\n"
+end
+end
+
+
 
 #USER INTERACTION:
 #Ask for the users name
@@ -110,12 +126,28 @@ end
   match_liqour_type_to_diary(liquor_type, user_db)
 
 #Collect the data about the new entry in the diary and insert this data into the table
+begin
+puts "Do you want to add a new bottle of liquor to your diary? y/n"
+add_new_liquor = gets.chomp
+if add_new_liquor.downcase == "y"
   if liquor_type.downcase == "whiskey"
   add_whiskey_to_diary(user_db)
   elsif liquor_type.downcase == "wine"
   add_wine_to_diary(user_db)
   else puts "Sorry, we are working on expanding our liquor options for your diaries. Stay tunned!"
   end
+elsif add_new_liquor.downcase == "n"
+  puts "That's cool! Let's move on!"
+else puts "Sorry, we didn't get it."
+end
+end until add_new_liquor.downcase == "n"
+
+view_wine_diary(user_db)
+#
 
 
+# kittens = db.execute("SELECT * FROM kittens")
+# kittens.each do |kitten|
+#  puts "#{kitten['name']} is #{kitten['age']}"
+# end
 
