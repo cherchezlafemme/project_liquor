@@ -5,9 +5,7 @@ Database exist of the list of the liquor that user tried.
 Allow user to: 
 - add new liquor items to user's diary
 - view the whole diary log
-- see all the liquor that user rated specific way
-- view all the liquor that has the same grape, country, producer
-- update a comment to the specific item in the library
+- see all the liquor that user rated excellent
 =end
 
 require 'sqlite3'
@@ -51,6 +49,8 @@ def match_liqour_type_to_diary(liquor_type, db)
   elsif liquor_type.downcase == "wine"
     db.execute(create_table_wine)
   else puts "Sorry, we are working on expanding our liquor options for your diaries. Stay tunned!"
+    keep_using_program = false
+    return keep_using_program
   end
 end
 
@@ -113,14 +113,36 @@ def view_whiskey_diary(db)
   whiskey_library = db.execute("SELECT * FROM whiskeys")
   whiskey_library.each do |whiskey_bottle|
     puts "\n"
-    puts "Whiskey name: #{wine_bottle['name']}"
-    puts "Type: #{wine_bottle['type']}"
-    puts "Years this whiskey was aged: #{wine_bottle['aged']}"
-    puts "Producer: #{wine_bottle['producer']}"
-    puts "Comment: #{wine_bottle['comments']}"
-    puts "Rating: #{wine_bottle['rating']}"
+    puts "Whiskey name: #{whiskey_bottle['name']}"
+    puts "Type: #{whiskey_bottle['type']}"
+    puts "Years this whiskey was aged: #{whiskey_bottle['aged']}"
+    puts "Producer: #{whiskey_bottle['producer']}"
+    puts "Comment: #{whiskey_bottle['comments']}"
+    puts "Rating: #{whiskey_bottle['rating']}"
     puts "\n"
 end
+end
+
+def wine_great_rating(db)
+  wine_library = db.execute("SELECT * FROM wines")
+  puts "Wine you gave rating 8 and up:"
+  wine_library.each do |wine_bottle| 
+    if wine_bottle['rating'] >= 8
+    puts "Wine name: #{wine_bottle['name']}; Vintage: #{wine_bottle['year']}"
+    else
+    end
+  end
+end
+
+def whiskey_great_rating(db)
+  whiskey_library = db.execute("SELECT * FROM whiskeys")
+  puts "Whiskey you gave rating 8 and up:"
+  whiskey_library.each do |whiskey_bottle| 
+    if whiskey_bottle['rating'] >= 8
+    puts "Whiskey name: #{whiskey_bottle['name']}; Type: #{whiskey_bottle['type']}"
+    else 
+    end
+  end
 end
 
 
@@ -137,42 +159,57 @@ end
 #Match the liquor type with the database and create a table if it doesn't exist
   match_liqour_type_to_diary(liquor_type, user_db)
 
-#Collect the data about the new entry in the diary and insert this data into the table
-begin
-puts "Do you want to add a new bottle of liquor to your diary? y/n"
-add_new_liquor = gets.chomp
-if add_new_liquor.downcase == "y"
-  if liquor_type.downcase == "whiskey"
-  add_whiskey_to_diary(user_db)
-  elsif liquor_type.downcase == "wine"
-  add_wine_to_diary(user_db)
-  else puts "Sorry, we are working on expanding our liquor options for your diaries. Stay tunned!"
-  end
-elsif add_new_liquor.downcase == "n"
-  puts "That's cool! Let's move on!"
-else puts "Sorry, we didn't get it."
-end
-end until add_new_liquor.downcase == "n"
-
-#See all the items you have in your liquor diary
-end_looking = false
-begin
-puts "Do you want to see your liquor diary log? y/n"
-see_diary_log = gets.chomp
-  if see_diary_log.downcase == "y"
-    if liquor_type.downcase == "wine"
-    view_wine_diary(user_db)
-    end_looking = true
-    elsif liquor_type.downcase == "whiskey"
-    view_whiskey_diary(user_db)
-    end_looking = true
-    else  puts "Sorry, we are working on expanding our liquor options for your diaries. Stay tunned!"
-    end_looking = true
+if match_liqour_type_to_diary(liquor_type, user_db) == false
+else
+  #Collect the data about the new entry in the diary and insert this data into the table
+  begin
+  puts "Do you want to add a new bottle of liquor to your diary? y/n"
+  add_new_liquor = gets.chomp
+  if add_new_liquor.downcase == "y"
+    if liquor_type.downcase == "whiskey"
+    add_whiskey_to_diary(user_db)
+    elsif liquor_type.downcase == "wine"
+    add_wine_to_diary(user_db)
+    else puts "Sorry, we are working on expanding our liquor options for your diaries. Stay tunned!"
     end
-  elsif see_diary_log.downcase == "n"
-    end_looking = true
-  else puts "Sorry, there must be an error. Let's try one more time!"
+  elsif add_new_liquor.downcase == "n"
+    puts "That's cool! Let's move on!"
+  else puts "Sorry, we didn't get it."
   end
-end until end_looking == true
+  end until add_new_liquor.downcase == "n"
 
+  #See all the items you have in your liquor diary
+  end_looking = false
+  begin
+  puts "Do you want to see your liquor diary log? y/n"
+  see_diary_log = gets.chomp
+    if see_diary_log.downcase == "y"
+      if liquor_type.downcase == "wine"
+      view_wine_diary(user_db)
+      end_looking = true
+      elsif liquor_type.downcase == "whiskey"
+      view_whiskey_diary(user_db)
+      end_looking = true
+      else  puts "Sorry, we are working on expanding our liquor options for your diaries. Stay tunned!"
+      end_looking = true
+      end
+    elsif see_diary_log.downcase == "n"
+      end_looking = true
+    else puts "Sorry, there must be an error. Let's try one more time!"
+    end
+  end until end_looking == true
+
+  puts "Do you want to see the liquor you rated as excellent? y/n"
+  see_excellent_rating = gets.chomp
+  if see_excellent_rating == "y"
+    if liquor_type.downcase == "wine"
+    wine_great_rating(user_db)
+    elsif liquor_type.downcase == "whiskey"
+    whiskey_great_rating(user_db)
+    else puts "Sorry, we are working on expanding our liquor options for your diaries. Stay tunned!"
+    end
+  else puts "Hope you will find some great bottles soon!"
+  end
+end
+puts "Thank you for using our program!"
 
