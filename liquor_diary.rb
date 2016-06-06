@@ -1,3 +1,16 @@
+#PSEUDOCODE
+=begin
+Program allows user create a database with their username as a title.
+Database exist of the list of the liquor that user tried.
+Allow user to: 
+- add new liquor items to user's diary
+- update existing item information
+- view the whole diary log
+- see all the liquor that user rated specific way
+- view all the liquor that has the same grape, country, producer
+- update a comment to the specific item in the library
+=end
+
 require 'sqlite3'
 
 #BUSINESS LOGIC:
@@ -33,7 +46,7 @@ def match_liqour_type_to_diary(liquor_type, db)
       rating INT
     )
   SQL
-  
+
   if liquor_type.downcase == "whiskey"
     db.execute(create_table_whiskey)
   elsif liquor_type.downcase == "wine"
@@ -54,6 +67,9 @@ end
   user_db = create_database(username)
 #Match the liquor type with the database
   match_liqour_type_to_diary(liquor_type, user_db)
+
+
+
 
 
 
