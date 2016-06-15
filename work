@@ -1,0 +1,31 @@
+
+
+def add_next
+	index = 3
+	while index > 1
+hash_result_index = {0 => 0, 1 => 1, 1 => 2, 2 => 3}
+p current_n = hash_result_index.index(index)
+p previous = hash_result_index.index(index-1)
+ result_number = previous + current_n 
+ p result_number
+
+hash_result_index[result_number] = index
+p hash_result_index 
+index += 1
+end
+end
+
+
+
+def recursive_nth_fibonacci_number(n)
+return 1 if n < 2
+result = 1
+previous = 1
+p result = result + recursive_nth_fibonacci_number(previous)
+return result
+previous = result
+
+
+end
+
+recursive_nth_fibonacci_number(3)
