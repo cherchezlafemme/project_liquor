@@ -29,3 +29,39 @@ previous = result
 end
 
 recursive_nth_fibonacci_number(3)
+
+
+********************************************************
+def recursive_nth_fibonacci_number(n)
+initial_fibinaci_hash = [0, 1]
+index = n
+until n = 2
+fibinaci_result = initial_fibinaci_hash[n] + initial_fibinaci_hash[n-1]
+p initial_fibinaci_hash.push(fibinaci_result)
+index -= 1
+end
+initial_fibinaci_hash
+end
+
+recursive_nth_fibonacci_number(3)
+*********************************************************
+BINARY
+
+def binary_search_include?(object, array_of_objects)
+	p array_of_objects
+	
+  mid_point = array_of_objects.length / 2
+  object_at_mid_point = array_of_objects[mid_point]
+  
+  if object < object_at_mid_point 
+   binary_search_include?(object, array_of_objects[0..mid_point])
+  elsif object > object_at_mid_point 
+  binary_search_include?(object, array_of_objects[mid_point...array_of_objects.length])
+  end
+  
+ 
+end
+
+
+symbols = [:A, :B, :C, :D]
+binary_search_include?(:A, symbols)
