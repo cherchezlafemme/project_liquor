@@ -1,67 +1,44 @@
 
-
-def add_next
-	index = 3
-	while index > 1
-hash_result_index = {0 => 0, 1 => 1, 1 => 2, 2 => 3}
-p current_n = hash_result_index.index(index)
-p previous = hash_result_index.index(index-1)
- result_number = previous + current_n 
- p result_number
-
-hash_result_index[result_number] = index
-p hash_result_index 
-index += 1
-end
-end
+def run_loop (board_array, cell_number, guess_number)
+  loop do
+    all_empty_cells = empty_cells_addresses_whole_board(board_array)
+    p all_empty_cells
+      break if all_empty_cells.length == 0
+      cells_and_its_candidates = find_candidates_for_each_empty_cell(board_array, all_empty_cells)
 
 
+      # if find_candidates_for_each_empty_cell(board_array, all_empty_cells) == false
+      #   puts "MOVING ON TO THE SECOND GUESS"
 
-def recursive_nth_fibonacci_number(n)
-return 1 if n < 2
-result = 1
-previous = 1
-p result = result + recursive_nth_fibonacci_number(previous)
-return result
-previous = result
+      #   # guess_number = 1
+      #   # run_loop(board_array, cell_number, guess_number)
+
+      #   # break  if can_solve_more?(cells_and_its_candidates) == false
+
+      # end
+
+    p can_solve_more?(cells_and_its_candidates)
+      if can_solve_more?(cells_and_its_candidates) == false
+        puts "LINE 35"
+        cells_and_its_candidates.values[cell_number].each do |possibilite_value|
 
 
-end
+          loop do guess_number = possibilite_value
+            p guess_number
+            p cells_and_its_candidates
+            p all_empty_cells
+            puts "LINE 37"
+          impliment_advanced_logic(board_array, cells_and_its_candidates, cell_number, guess_number, all_empty_cells)
 
-recursive_nth_fibonacci_number(3)
+          break if find_candidates_for_each_empty_cell(board_array, all_empty_cells) == false
+          end
+        end
+      return board_array
+      end
 
-
-********************************************************
-def recursive_nth_fibonacci_number(n)
-initial_fibinaci_hash = [0, 1]
-index = n
-until n = 2
-fibinaci_result = initial_fibinaci_hash[n] + initial_fibinaci_hash[n-1]
-p initial_fibinaci_hash.push(fibinaci_result)
-index -= 1
-end
-initial_fibinaci_hash
-end
-
-recursive_nth_fibonacci_number(3)
-*********************************************************
-BINARY
-
-def binary_search_include?(object, array_of_objects)
-	p array_of_objects
-	
-  mid_point = array_of_objects.length / 2
-  object_at_mid_point = array_of_objects[mid_point]
-  
-  if object < object_at_mid_point 
-   binary_search_include?(object, array_of_objects[0..mid_point])
-  elsif object > object_at_mid_point 
-  binary_search_include?(object, array_of_objects[mid_point...array_of_objects.length])
+    match_finder_updater_board(board_array, cells_and_its_candidates)
+  #   return board_array if board_has_empty_cell?(board_array) == false
+  # puts "LINE 37 #{board_array}"
+    board_array
   end
-  
- 
 end
-
-
-symbols = [:A, :B, :C, :D]
-binary_search_include?(:A, symbols)
